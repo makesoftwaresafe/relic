@@ -876,10 +876,10 @@ void bn_rec_glv(bn_t k0, bn_t k1, const bn_t k, const bn_t n, const bn_t *v1,
 	}
 }
 
-void bn_rec_sac(int8_t *b, size_t *len, bn_t *k, size_t m, bn_t n) {
+void bn_rec_sac(int8_t *b, size_t *len, bn_t *k, size_t c, size_t m, size_t n) {
 	/* Assume k0 is the sign-aligner. */
 	bn_t *t = RLC_ALLOCA(bn_t, m);
-	size_t l = RLC_CEIL(bn_bits(n), m) + 1;
+	size_t l = RLC_CEIL(n, c * m) + 1;
 	int8_t bji;
 
 	if (t == NULL) {
@@ -895,16 +895,19 @@ void bn_rec_sac(int8_t *b, size_t *len, bn_t *k, size_t m, bn_t n) {
 	}
 
 	RLC_TRY {
+		fp_prime_get_par(t[0]);
+		l = RLC_MAX(l, bn_bits(t[0]) + 1);
 		for (size_t i = 0; i < m; i++) {
 			bn_null(t[i]);
 			bn_new(t[i]);
 			bn_copy(t[i], k[i]);
+			/* The current basis for some curves might be one bit longer. */
+			if (ep_curve_is_pairf() == EP_BN) {
+				l = RLC_MAX(l, bn_bits(t[i]) + 1);
+			}
 		}
 
-		/* The current basis for BN curves might be one bit longer. */
-		for (size_t i = 0; i < m; i++) {
-			l = RLC_MAX(l, bn_bits(k[i]) + 1);
-		}
+		memset(b, 0, *len);
 
 		b[l - 1] = 0;
 		for (size_t i = 0; i < l - 1; i++) {
