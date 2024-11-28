@@ -84,6 +84,8 @@ enum {
 	PRIME_22605,
 	/* Curve1174 251-bit prime modulus. */
 	PRIME_25109,
+	/* SQIsign lvl1 251-bit prime modulus. */
+	SQI_251,
 	/** Prime with high 2-adicity for curve Tweedledum. */
 	PRIME_H2ADC,
 	/** Curve25519 255-bit prime modulus. */
@@ -944,6 +946,14 @@ void fp_hlv_basic(fp_t c, const fp_t a);
  * @param[in] a				- the prime field element to halve.
  */
 void fp_hlv_integ(fp_t c, const fp_t a);
+
+/**
+ * Divides a prime field element by 3 (trisecting). Computes C = A/3.
+ *
+ * @param[out] C			- the result.
+ * @param[in] A				- the first prime field element.
+ */
+void fp_trs(fp_t c, const fp_t a);
 
 /**
  * Multiples two prime field elements using Schoolbook multiplication.
