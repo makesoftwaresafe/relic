@@ -806,7 +806,10 @@ static int square_root2(void) {
 			TEST_ASSERT(r, end);
 			TEST_ASSERT(fp2_cmp(b, a) == RLC_EQ ||
 					fp2_cmp(c, a) == RLC_EQ, end);
-
+			r = fp2_srt(c, a);
+			fp2_sqr(b, c);
+			TEST_ASSERT(r, end);
+			TEST_ASSERT(fp2_cmp(b, a) == RLC_EQ, end);
 			fp_zero(a[0]);
 			fp_rand(a[1]);
 			fp2_sqr(c, a);
