@@ -869,7 +869,7 @@ static int cube_root2(void) {
 			do {
 				fp2_rand(a);
 			} while(fp2_crt(b, a) == 1);
-			TEST_ASSERT(fp2_is_cub(b) == 0, end);
+			TEST_ASSERT(fp2_is_cub(a) == 0, end);
 		}
 		TEST_END;
 
